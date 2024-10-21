@@ -1,61 +1,64 @@
-import { Checkbox, Typography } from '@mui/material';
-import React, {useState} from 'react'
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { UpdateTaskForm } from './UpdateTaskForm';
-import classnames from 'classnames';
-import { Button } from '@mui/material';
-import axios from 'axios';
-import { API_URL } from '../utils';
-import { fetchTasks } from '../../../api/task';
+import { Button, Checkbox, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import React, { useState } from "react";
+import { UpdateTaskForm } from "./UpdateTaskForm";
+import classnames from "classnames";
+import axios from "axios";
+import { API_URL } from "../utils";
 
-export const Task = ({task}) => {
-
-  const {id, name, completed} = task;
-  const [isComplete, setisComplete] = useState(completed);
+export const Task = ({ task, fetchTasks }) => {
+  const { id, name, completed } = task;
+  const [isComplete, setIsComplete] = useState(completed);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleUpdateTask = async({ task, fetchTasks }) => {
+  const handleUpdateTaskCompletion = async () => {
     try {
       await axios.put(API_URL, {
-        id, name, completed: !isComplete
+        id,
+        name,
+        completed: !isComplete,
       });
-
-      setisComplete((prev) => !prev);
-    } catch (error) {
-      console.log(error);
+      setIsComplete((prev) => !prev);
+    } catch (err) {
+      console.log(err);
     }
-  }
-  const handleCheckboxChange = (e) => {
-    setisComplete((prev) => !prev)
-  }
+  };
 
   const handleDeleteTask = async () => {
     try {
-      axios.delete(`${API_URL}/${task.id}`);
+      await axios.delete(`${API_URL}/${task.id}`);
+
       await fetchTasks();
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
-    <div className='task'>
-        <div className={classnames("flex", {
-            done: isComplete
-        })}>
-            <Checkbox checked={isComplete} onChange = {handleCheckboxChange} />
-            <Typography variant = 'h4'>{name}</Typography>
-        </div>
-        <div className='taskButtons'>
-            <Button variant='contained' onClick = {() => setIsDialogOpen(true)}>
-                <EditIcon />
-            </Button>
-            <Button color = 'error' variant='contained' onClick = {handleDeleteTask}> 
-                <DeleteIcon />
-            </Button>
-        </div>
-        <UpdateTaskForm isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} task = {task} fetchTasks = {fetchTasks}/>
+    <div className="task">
+      <div
+        className={classnames("flex", {
+          done: isComplete,
+        })}
+      >
+        <Checkbox checked={isComplete} onChange={handleUpdateTaskCompletion} />
+        <Typography variant="h4">{name}</Typography>
+      </div>
+      <div className="taskButtons">
+        <Button variant="contained" onClick={() => setIsDialogOpen(true)}>
+          <EditIcon />
+        </Button>
+        <Button color="error" variant="contained" onClick={handleDeleteTask}>
+          <DeleteIcon />
+        </Button>
+      </div>
+      <UpdateTaskForm
+        fetchTasks={fetchTasks}
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        task={task}
+      />
     </div>
-  )
-}
+  );
+};
