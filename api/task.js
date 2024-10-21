@@ -1,10 +1,9 @@
 import { ListTablesCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { UpdateCommand, PutCommand, DynamoDBDocumentClient, ScanCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import crpyto from "crypto";
-import axios from 'axios';
-import { API_URL } from '../utils';
 
-const client = new DynamoDBClient({ region: "us-west-2" });
+
+const client = new DynamoDBClient({ region: "eu-north-1" });
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const fetchTasks = async () => {

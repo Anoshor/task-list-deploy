@@ -1,7 +1,8 @@
 import express from "express"
-import { fetchTasks, updateTasks, createTasks, deleteTasks } from './task';
+import { fetchTasks, updateTasks, createTasks, deleteTasks } from './task.js';
 import serverless from "serverless-http"
 import cors from "cors";
+import axios from "axios";
 const app = express()
 const port = 3001
 
